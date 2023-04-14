@@ -1,0 +1,203 @@
+<div class="container-fluid">
+  {{ f.value | json }}
+
+  <div class="container-fluid">
+      <div class="card mx-auto col-sm-12 col-md-6 col-lg-6 col-xl-6"  style="padding-top: 0;">
+          <div class="card-header">
+              <h4 class="text-center">Template Driven Forms</h4>
+          </div>
+
+          <div class="card-body">
+            <form #f='ngForm' novalidate (ngSubmit)="onSubmit()">
+                 
+                      <div class="form-group">
+                          <label for="firstname">First Name</label>
+                          <input 
+                          type="text" 
+                          class="form-control" 
+                          name='firstName' 
+                          #firstname="ngModel"
+                          (input) = "validateName(firstname.value)" 
+                          required 
+                          minlength="3"
+                          [(ngModel)]="userData.firstname"
+                          [ngClass]="{'form-control': true, 'is-invalid': (firstname.touched && firstname.invalid) || nameHasError}" 
+
+                          />
+                         <!-- {{firstname.className | json }} -->
+                         <small class="alert alert-danger text-center w-100" *ngIf="firstname.touched && firstname.errors?.['required']"> 
+                          this field is requierd</small>
+                          <small class="alert alert-danger text-center w-100" *ngIf="firstname.touched && firstname.errors?.['minlength']">
+                            Write 3 characterd at least
+                          </small>
+                          </div>
+                          <label class="alert alert-danger text-center w-100" *ngIf="nameHasError"> الاسم مرفوض  </label>
+                     
+                      <div class="form-group">
+                          <label for="lastname">First Name</label>
+                          <input
+                              type="text"
+                              class="form-control"
+                              id="lastname"
+                              name="lastName"
+                              #lastname="ngModel"
+                              required
+                              minlength="3"
+                              [(ngModel)]="userData.lastname"
+                              [class.is-invalid]="lastname.touched && !lastname.valid"
+                           />
+                          
+                      </div>
+                      <small class="alert alert-danger text-center w-100" *ngIf="lastname.touched && lastname.errors?.['required']"> 
+                        this field is requierd</small>
+                        <small class="alert alert-danger text-center w-100" *ngIf="lastname.touched && lastname.errors?.['minlength']">
+                          Write 3 characterd at least
+                        </small>
+                      
+                 
+                  
+                  <div class="form-group">
+                      <label for="email">E-Mail</label>
+                      <input 
+                      
+                      type="email" 
+                      name="email"
+                      #Email="ngModel" 
+                      required 
+                      pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" 
+                      [(ngModel)]="userData.email"
+                      [ngClass]="{'form-control': true, 'is-invalid': Email.touched &&  Email.invalid}"
+                      
+                      />
+                      <div [ngClass]="{'alert': true, 'alert-danger': true, 'text-center': true, 'w-100': 
+                         true, 'd-none': Email.untouched || Email.valid}">
+                        
+                        <small *ngIf="Email.errors?.['required']">E-mail is requierd</small>
+                        <small *ngIf="Email.errors?.['pattern']">Incorrect value for E-mail</small>
+                      </div>
+                  </div>
+                 
+                  <div class="form-group">
+                      <label for="">Phone Number</label>
+                      <input 
+                      
+                         type="tel" 
+                         class="form-control" 
+                         name="phone" 
+                         #phone="ngModel" 
+                         required 
+                         pattern="^\d{10}$" 
+                         maxlength="10" 
+                         [(ngModel)]="userData.phone"
+                         mask="(000) 000-0000" 
+                         placeholder="(123) 456-7890"
+                      /> 
+                  </div>
+
+                  <div class="form-group">
+                      <label for="">Password</label>
+                      <input 
+                      (input)="validatePaaword(password.value, confirmPassword.value)"
+                      type="password" 
+                      name='password'
+                      #password="ngModel" 
+                      required 
+                      pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"
+                      [(ngModel)]="userData.password"
+                      [ngClass]="{'form-control': true, 'is-invalid': password.touched && password.invalid}" 
+
+                      /> 
+                  </div>
+                  <div [ngClass]="{'alert': true, 'alert-danger': true, 'text-center': true, 'w-100': 
+                       true, 'd-none': password.untouched || password.valid}"> 
+                      
+                   
+                      <small  
+                       *ngIf="password.touched && password.errors?.['pattern']">enter 6 character only capital and smaller letters
+                      </small>
+                    
+                    </div>
+                  <div class="form-group">
+                      <label for=""> Reenter Password </label>
+                      <input 
+                      (input)="validatePaaword(password.value, confirmPassword.value)"
+                      type="password" 
+                      name="confirmPassword" 
+                      #confirmPassword="ngModel"
+                      [ngClass]="{'form-control': true, 'is-invalid': confirmPassword.touched && confirmPassword.invalid}"
+
+                      ngModel
+                      />
+                  </div>
+                  <div [ngClass]="{'alert': true, 'alert-danger': true, 'text-center': true, 'w-100': 
+                  true, 'd-none': confirmPassword.touched || confirmPassword.valid}"> 
+                   <small *ngIf="confirmPassword.errors?.['required']">Please confirm password correctly </small>
+                   </div>
+                   <label class="alert alert-danger text-center w-100" *ngIf="passwordHasError && confirmPassword.touched">
+                    Password is not matched
+                   </label>
+                  <div class="mb-3">
+                      <label>Gender : </label>
+                      <div class="radio" *ngFor="let gender of genders">
+                          <label>
+                              <input
+                                #gender="ngModel" 
+                                required 
+                                type="radio"
+                                name="gender"
+                                [(ngModel)]="userData.gender"
+                                value="{{gender}}"
+                              />
+                              {{ gender }}
+                          </label>
+                      </div>
+                      
+                  </div>
+                  
+                  <div class="form-group">
+                      <select 
+                       (blur)="validateStatus(statuss.value)" 
+                       (change)="validateStatus(statuss.value)" 
+                        #statuss="ngModel" 
+                        [(ngModel)]="userData.Sstatus"
+                        name = "Sstatus"
+                        [ngClass]="{'custom-select': true, 'is-invalid': statusHasError && statuss.touched}"
+                        >
+                        <option value="default">
+                          Choice Your Social Status Please ..
+                        </option>
+
+                        <option *ngFor="let state of status">
+                          {{ state }}
+                        </option>
+                      </select>
+                  </div>
+                  <label class="alert alert-danger text-center w-100" *ngIf="statusHasError && statuss.touched">
+                    You must choice anthor element 
+                  </label>
+
+                  <div class="form-check my-3">
+                      <input
+                          class="form-check-input"
+                          type="checkbox"
+                          name="Agree"
+                          #tickIt="ngModel"
+                          [(ngModel)]="userData.agree"
+                        />
+
+                      <label class="form-check-label">
+                          Approve terms of use
+                      </label>
+                     
+                      
+                  </div>
+
+                  <div class="card-footer text-muted">
+                      <button class="btn btn-primary" type="submit" [disabled]="f.form.invalid || !tickIt.value || nameHasError || passwordHasError || statusHasError">
+                          Submit Form
+                      </button>
+                  </div>
+              </form>
+          </div>
+      </div>
+  </div>
