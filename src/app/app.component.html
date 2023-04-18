@@ -1,3 +1,4 @@
+
 <div class="container-fluid">
   {{ f.value | json }}
 
@@ -14,27 +15,27 @@
                           <label for="firstname">First Name</label>
                           <input 
                           type="text" 
-                          class="form-control" 
+                         
                           name='firstName' 
                           #firstname="ngModel"
-                          (input) = "validateName(firstname.value)" 
+                         
                           required 
                           minlength="3"
                           [(ngModel)]="userData.firstname"
-                          [ngClass]="{'form-control': true, 'is-invalid': (firstname.touched && firstname.invalid) || nameHasError}" 
+                          [ngClass]="{'form-control': true, 'is-invalid': (firstname.touched && firstname.invalid) }" 
 
                           />
                          <!-- {{firstname.className | json }} -->
-                         <small class="alert alert-danger text-center w-100" *ngIf="firstname.touched && firstname.errors?.['required']"> 
-                          this field is requierd</small>
-                          <small class="alert alert-danger text-center w-100" *ngIf="firstname.touched && firstname.errors?.['minlength']">
+                         <label class="alert alert-danger text-center w-100" *ngIf="firstname.touched && firstname.errors?.['required']"> 
+                          this field is requierd</label>
+                          <label class="alert alert-danger text-center w-100" *ngIf="firstname.touched && firstname.errors?.['minlength']">
                             Write 3 characterd at least
-                          </small>
+                          </label>
                           </div>
-                          <label class="alert alert-danger text-center w-100" *ngIf="nameHasError"> الاسم مرفوض  </label>
+                        
                      
                       <div class="form-group">
-                          <label for="lastname">First Name</label>
+                          <label for="lastname">Last Name</label>
                           <input
                               type="text"
                               class="form-control"
@@ -48,11 +49,11 @@
                            />
                           
                       </div>
-                      <small class="alert alert-danger text-center w-100" *ngIf="lastname.touched && lastname.errors?.['required']"> 
-                        this field is requierd</small>
-                        <small class="alert alert-danger text-center w-100" *ngIf="lastname.touched && lastname.errors?.['minlength']">
+                      <label class="alert alert-danger text-center w-100" *ngIf="lastname.touched && lastname.errors?.['required']"> 
+                        this field is requierd</label>
+                        <label class="alert alert-danger text-center w-100" *ngIf="lastname.touched && lastname.errors?.['minlength']">
                           Write 3 characterd at least
-                        </small>
+                        </label>
                       
                  
                   
@@ -72,8 +73,8 @@
                       <div [ngClass]="{'alert': true, 'alert-danger': true, 'text-center': true, 'w-100': 
                          true, 'd-none': Email.untouched || Email.valid}">
                         
-                        <small *ngIf="Email.errors?.['required']">E-mail is requierd</small>
-                        <small *ngIf="Email.errors?.['pattern']">Incorrect value for E-mail</small>
+                        <label *ngIf="Email.errors?.['required']">E-mail is requierd</label>
+                        <label *ngIf="Email.errors?.['pattern']">Incorrect value for E-mail</label>
                       </div>
                   </div>
                  
@@ -97,30 +98,32 @@
                   <div class="form-group">
                       <label for="">Password</label>
                       <input 
-                      (input)="validatePaaword(password.value, confirmPassword.value)"
+                      
                       type="password" 
                       name='password'
                       #password="ngModel" 
                       required 
                       pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"
                       [(ngModel)]="userData.password"
-                      [ngClass]="{'form-control': true, 'is-invalid': password.touched && password.invalid}" 
+                      [ngClass]="{'form-control': true, 'is-invalid': (password.touched && password.invalid)}" 
 
                       /> 
                   </div>
+                 
                   <div [ngClass]="{'alert': true, 'alert-danger': true, 'text-center': true, 'w-100': 
-                       true, 'd-none': password.untouched || password.valid}"> 
+                         true, 'd-none': password.untouched || password.valid}">
+                  
                       
-                   
-                      <small  
-                       *ngIf="password.touched && password.errors?.['pattern']">enter 6 character only capital and smaller letters
-                      </small>
-                    
+                         <label *ngIf="password.errors?.['required']">password is requierd</label>
+                         <label *ngIf="((password.touched) && (password.errors?.['pattern']))">Incorrect value for password</label>
+                         <label *ngIf="((password.touched) && (password.errors?.['notEqual']))">Password not matched</label>
                     </div>
+                    
                   <div class="form-group">
                       <label for=""> Reenter Password </label>
                       <input 
-                      (input)="validatePaaword(password.value, confirmPassword.value)"
+                      required
+                      appConfirmEqualValidator="password"
                       type="password" 
                       name="confirmPassword" 
                       #confirmPassword="ngModel"
@@ -130,12 +133,12 @@
                       />
                   </div>
                   <div [ngClass]="{'alert': true, 'alert-danger': true, 'text-center': true, 'w-100': 
-                  true, 'd-none': confirmPassword.touched || confirmPassword.valid}"> 
-                   <small *ngIf="confirmPassword.errors?.['required']">Please confirm password correctly </small>
-                   </div>
-                   <label class="alert alert-danger text-center w-100" *ngIf="passwordHasError && confirmPassword.touched">
-                    Password is not matched
-                   </label>
+                  true, 'd-none': confirmPassword.untouched || confirmPassword.valid}"> 
+                   <label *ngIf="confirmPassword.errors?.['required']">Please confirm password (this field is requierd) </label>
+                   <label *ngIf="confirmPassword.errors?.['notEqual']">Please repeat password correctly </label>
+                   <label *ngIf="((password.touched) && (password.errors?.['notEqual']))">Password not matched</label>
+                  </div>
+                  
                   <div class="mb-3">
                       <label>Gender : </label>
                       <div class="radio" *ngFor="let gender of genders">
@@ -156,12 +159,12 @@
                   
                   <div class="form-group">
                       <select 
-                       (blur)="validateStatus(statuss.value)" 
-                       (change)="validateStatus(statuss.value)" 
+                      
+                       
                         #statuss="ngModel" 
                         [(ngModel)]="userData.Sstatus"
                         name = "Sstatus"
-                        [ngClass]="{'custom-select': true, 'is-invalid': statusHasError && statuss.touched}"
+                        [ngClass]="{'custom-select': true, 'is-invalid': statuss.touched}"
                         >
                         <option value="default">
                           Choice Your Social Status Please ..
@@ -172,9 +175,7 @@
                         </option>
                       </select>
                   </div>
-                  <label class="alert alert-danger text-center w-100" *ngIf="statusHasError && statuss.touched">
-                    You must choice anthor element 
-                  </label>
+                 
 
                   <div class="form-check my-3">
                       <input
@@ -193,7 +194,7 @@
                   </div>
 
                   <div class="card-footer text-muted">
-                      <button class="btn btn-primary" type="submit" [disabled]="f.form.invalid || !tickIt.value || nameHasError || passwordHasError || statusHasError">
+                      <button class="btn btn-primary" type="submit" [disabled]="f.form.invalid">
                           Submit Form
                       </button>
                   </div>
@@ -201,3 +202,4 @@
           </div>
       </div>
   </div>
+
