@@ -4,7 +4,7 @@ export class User {
         public lastname: string,
         public email: string,
         public password: string,
-        public phone: number,
+        public phone: number|null,
         public Sstatus: string,
         public gender: string,
         public agree: boolean

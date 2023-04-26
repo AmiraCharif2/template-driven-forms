@@ -1,27 +1,35 @@
 import { Directive, Input } from '@angular/core';
-import { AbstractControl, NG_VALIDATORS, ValidationErrors, Validator } from '@angular/forms';
+import {
+  AbstractControl,
+  NG_VALIDATORS,
+  ValidationErrors,
+  Validator,
+} from '@angular/forms';
 
 @Directive({
   selector: '[appConfirmEqualValidator]',
-  providers:[{
-    provide:NG_VALIDATORS,
-    useExisting: ConfirmEqualValidatorDirective,
-    multi:true
-  }]
+  providers: [
+    {
+      provide: NG_VALIDATORS,
+      useExisting: ConfirmEqualValidatorDirective,
+      multi: true,
+    },
+  ],
 })
-export class ConfirmEqualValidatorDirective implements Validator  {
+export class ConfirmEqualValidatorDirective implements Validator {
+  @Input() appConfirmEqualValidator = '';
 
-@Input() ('appConfirmEqualValidator')   appConfirmEqualValidator=''
+  validate(control: AbstractControl): { [key: string]: any } | null {
+    console.log('amira');
 
-  validate(control: AbstractControl): { [key: string]: any} | null {
-     const controlToCompare=control.parent?.get(this.appConfirmEqualValidator);
-     if(controlToCompare && controlToCompare.value != control.value){
-        return {'notEqaul' : true};
-     }
-     return null;
+    const controlToCompare = control.parent?.get(this.appConfirmEqualValidator);
+    console.log(controlToCompare?.value);
+    console.log(control.value);
+    if (controlToCompare && controlToCompare.value != control.value) {
+      return { notEqaul: true };
+    }
+    return null;
   }
 
-
-  constructor() { }
-
+  constructor() {}
 }
